@@ -767,8 +767,9 @@ ul#myTab {
 
 .header-top-area img {
   width: 100%;
-  height: auto;
+  height: 260px;
   border-radius: 12px;
+  object-fit: contain;
 }
 
 .product-main-bottom-data {

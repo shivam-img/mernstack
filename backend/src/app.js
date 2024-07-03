@@ -20,6 +20,7 @@ const ProductModels = require("./routes/product.routes")
 const prefix = '/api/v1'
 app.use(`${prefix}/image`, imgRouter)
 app.use(`${prefix}/users`, userRouter)
+
 app.use(`${prefix}/product`, ProductModels)
 
 module.exports = { app }
