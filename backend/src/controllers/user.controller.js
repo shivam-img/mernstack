@@ -226,8 +226,16 @@ const getUserLogout = (async (req, res) => {
         });
 
     }
-})
+});
+
+const getUserChangePasswords = async(req , res) => {
+
+    const {currentPassword , UpdatedPasswaord , confirmPasswords} = req.body
+
+    console.log({currentPassword , UpdatedPasswaord , confirmPasswords});
+
+}
 
 
-module.exports = { registreUser, loginUser, getCurrentUser, getUserLogout };
+module.exports = { registreUser, loginUser, getCurrentUser, getUserLogout , getUserChangePasswords };
 

@@ -1,5 +1,5 @@
 const Router = require("express");
-const { registreUser, loginUser, getCurrentUser, getUserLogout } = require("../controllers/user.controller");
+const { registreUser, loginUser, getCurrentUser, getUserLogout, getUserChangePasswords } = require("../controllers/user.controller");
 const upload = require("../middlewares/multer.middleware");
 const verifyJWT = require('../middlewares/auth.middleware');
 
@@ -25,6 +25,7 @@ router.route("/register").post(
 router.route("/login").post(loginUser);
 router.route("/getUserAllDetatils").get(verifyJWT, getCurrentUser);
 router.route("/logout").get(verifyJWT, getUserLogout)
+router.route("/change-password").post(verifyJWT , getUserChangePasswords)
 
 
 
