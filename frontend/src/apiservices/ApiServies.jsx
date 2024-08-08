@@ -64,3 +64,36 @@ export const postAPI = async (url, params) => {
 
     }
 };
+
+export const postAPIAuth = async (url, params, tokenInit) => {
+    // const token = localStorage.getItem(TOKEN_NAME)
+    const bURL = baseURL;
+    const token = localStorage.getItem(TOKEN_NAME);
+    try {
+      const response = await axios.post(`${bURL}/${url}`, params, {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json",
+          Authorization: `Bearer ${tokenInit ? tokenInit : token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      if (error?.response?.data?.msg === "Invalid token") {
+        // alert('postAPIAuth')
+        localStorage.removeItem(TOKEN_NAME);
+        localStorage.removeItem(ADMIN_FRONTEND_LOGGED_IN_ID);
+        localStorage.removeItem(STOCK_USER_ID);
+        // signOut(auth)
+        //     .then(() => {
+        //         // succesToaster("Logged Out")
+        //     })
+        //     .catch((error) => {
+        //         // An error happened.
+        //     });
+        // window.location.reload(true);
+      }
+      // console.log("error=>", error);
+      throw error;
+    }
+  };

@@ -1,6 +1,9 @@
 const User = require("../models/user.model.js");
+const Rating = require("../models/productRating.js");
 const asyncHandler = require("../utils/asynchandler.js");
 const uploadOnCloudinary = require("../utils/cloudinary.js");
+const { getProductRatingsWithAverage } = require("../services/ratingService.js");
+// cosnt getProductRatingsWithAverage
 
 
 
@@ -8,12 +11,10 @@ const generateAccessAndRefereshTokens = async (userId) => {
     try {
         const user = await User.findById(userId)
         const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
-
-        user.refreshToken = refreshToken
+       
         await user.save({ validateBeforeSave: false })
 
-        return { accessToken, refreshToken }
+        return { accessToken }
 
 
     } catch (error) {
@@ -50,6 +51,7 @@ const registreUser = (async (req, res) => {
         }
 
         const avatarLocalPath = req.files?.avatar[0]?.path;
+        console.log("avatarLocalPath" , avatarLocalPath);
 
         let coverImageLocalPath;
         if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
@@ -82,7 +84,6 @@ const registreUser = (async (req, res) => {
             username: username.toLowerCase()
         })
         delete user.password
-        delete user.refreshToken
 
         return res.status(200).json(
             {
@@ -106,6 +107,7 @@ const registreUser = (async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+
     try {
         const { email, username, password } = req.body
         if (!username && !email) {
@@ -135,9 +137,9 @@ const loginUser = asyncHandler(async (req, res) => {
             })
         }
 
-        const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
+        const { accessToken} = await generateAccessAndRefereshTokens(user._id)
 
-        const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+        const loggedInUser = await User.findById(user._id).select("-password")
 
         const options = {
             httpOnly: true,
@@ -147,12 +149,11 @@ const loginUser = asyncHandler(async (req, res) => {
         return res
             .status(200)
             .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", refreshToken, options)
             .json(
                 {
                     status: 200,
                     message: "User logged In Successfully",
-                    user: loggedInUser, accessToken, refreshToken
+                    user: loggedInUser, accessToken
                 }
             )
 
@@ -200,7 +201,6 @@ const getUserLogout = (async (req, res) => {
 
         const user = await User.findByIdAndUpdate(req.user._id, {
             accessToken: "",
-            refreshToken: ""
         })
         const options = {
             httpOnly: true,
@@ -210,7 +210,6 @@ const getUserLogout = (async (req, res) => {
         return res
             .status(200)
             .clearCookie("accessToken", options)
-            .clearCookie("refreshToken", options)
             .json({
                 status: 200,
                 message: "User logout Sucessfully",
@@ -236,6 +235,24 @@ const getUserChangePasswords = async(req , res) => {
 
 }
 
+const GetRatingFromUser = async(req , res) => {
+    const {rating,product} = req.body
+        console.log('req.user', req.user._id)
 
-module.exports = { registreUser, loginUser, getCurrentUser, getUserLogout , getUserChangePasswords };
+    const ratingData =  await Rating.create({
+        user: req.user._id,
+        rating,
+        product
+    });
+    return res.status(200).json(
+        {
+            status: 200,
+            message: "User fetched successfully",
+            data: ratingData
+        }
+    )
+}
+
+
+module.exports = { registreUser, loginUser, getCurrentUser, getUserLogout , getUserChangePasswords , GetRatingFromUser };
 

@@ -12,16 +12,14 @@ const ProductRating = new Schema(
             ref: "Product"
         },
         rating: {
-            type: String,
+            type: Number,
             require: true
         }
     },
     {
         timestamps: true,
-
-    },
-    {
         versionKey: false
+
     }
 )
 

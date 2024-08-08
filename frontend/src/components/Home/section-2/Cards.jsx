@@ -2,11 +2,32 @@ import React, { useState } from 'react'
 import { IoStar } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import { FiMinus } from "react-icons/fi";
+import "./style.css"
+import { postAPI, postAPIAuth } from '../../../apiservices/ApiServies';
+import useAuth from '../../../hooks/useAuth';
 
 function Cards({ data }) {
     // console.log("indexindex", data);
     const [count, setCount] = useState(0);
-    // console.log("count", count);
+    const {token} = useAuth();
+    console.log("counttoken", token);
+    const handleRatingData = async(ratingNumbers , rating_id) => {
+// alert("hii")
+        try {
+
+            const param = {
+                rating : ratingNumbers,
+                product : rating_id
+            }
+            const res = await postAPIAuth("users/rating", param , token);
+            console.log("wwwwwwwwwwwwwloginnnres", res);
+            
+        } catch (error) {
+            console.log("error" , error);
+            
+        }
+
+    }
     return (
         <>
             <div className="products header">
@@ -25,13 +46,13 @@ function Cards({ data }) {
                         <div className="product-paragraph">
                             <p>{data?.description}</p>
                         </div>
-
-                        <div className="product-rating">
-                            <IoStar />
-                            <IoStar />
-                            <IoStar />
-                            <IoStar />
-                            <IoStar />
+                        
+                        <div className="product-rating" onClick={() => handleRatingData(1 , data._id)}>
+                            <IoStar  onClick={() => handleRatingData(1 , data._id)}/>
+                            <IoStar  onClick={() => handleRatingData(2 , data._id)}/>
+                            <IoStar  onClick={() => handleRatingData(3 , data._id)}/>
+                            <IoStar  onClick={() => handleRatingData(4 , data._id)}/>
+                            <IoStar  onClick={() => handleRatingData(5 , data._id)}/>
                         </div>
                         <div className="product-pricting">
                             <div className="product-actual-price">
