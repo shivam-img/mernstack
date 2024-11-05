@@ -50,10 +50,37 @@ const ProductCollectionData = async (req, res) => {
 };
 
 const GetAllProduct = async (req, res) => {
-
+ 
     try {
-
-        const Products = await Product.find();
+      // const Products = await Product.find()
+        const Products = await Product.aggregate(
+         
+[
+  {
+    $lookup: {
+      from: "ratings",
+      localField: "_id",
+      foreignField: "product",
+      as: "product_rating"
+    }
+  },
+  {
+  $addFields: {
+    avgRating: {
+      $avg: {
+        $map: {
+          input: "$product_rating",
+          as: "pr",
+          in: "$$pr.rating"
+        }
+      }
+    }
+  }
+}
+]
+        );
+        console.log("ProductsProducts" , Products);
+        
         res.status(200).send({
             status: 200,
             message: "Fetch All Products",

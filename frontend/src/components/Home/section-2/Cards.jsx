@@ -5,8 +5,9 @@ import { FiMinus } from "react-icons/fi";
 import "./style.css"
 import { postAPI, postAPIAuth } from '../../../apiservices/ApiServies';
 import useAuth from '../../../hooks/useAuth';
+// import StarRatings from './react-star-ratings';
 
-function Cards({ data }) {
+function Cards({ data , getallProducts }) {
     // console.log("indexindex", data);
     const [count, setCount] = useState(0);
     const {token} = useAuth();
@@ -14,14 +15,15 @@ function Cards({ data }) {
     const handleRatingData = async(ratingNumbers , rating_id) => {
 // alert("hii")
         try {
-
             const param = {
                 rating : ratingNumbers,
                 product : rating_id
             }
             const res = await postAPIAuth("users/rating", param , token);
             console.log("wwwwwwwwwwwwwloginnnres", res);
-            
+            if(res.data.status == 200){
+                getallProducts();
+            }          
         } catch (error) {
             console.log("error" , error);
             
@@ -47,12 +49,12 @@ function Cards({ data }) {
                             <p>{data?.description}</p>
                         </div>
                         
-                        <div className="product-rating" onClick={() => handleRatingData(1 , data._id)}>
-                            <IoStar  onClick={() => handleRatingData(1 , data._id)}/>
-                            <IoStar  onClick={() => handleRatingData(2 , data._id)}/>
-                            <IoStar  onClick={() => handleRatingData(3 , data._id)}/>
-                            <IoStar  onClick={() => handleRatingData(4 , data._id)}/>
-                            <IoStar  onClick={() => handleRatingData(5 , data._id)}/>
+                        <div className="product-rating">
+                            <span onClick={() => handleRatingData(1 , data._id)}><IoStar /></span>
+                            <span onClick={() => handleRatingData(2 , data._id)}><IoStar /> </span>
+                            <span onClick={() => handleRatingData(3 , data._id)}> <IoStar /> </span>
+                            <span onClick={() => handleRatingData(4 , data._id)}> <IoStar /> </span>
+                            <span onClick={() => handleRatingData(5 , data._id)}> <IoStar /> </span>
                         </div>
                         <div className="product-pricting">
                             <div className="product-actual-price">

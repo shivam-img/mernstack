@@ -68,3 +68,26 @@ span.register-btn:hover {
 .navlinkdata.active {
     color: #be9309;
 }
+
+.right-header-data {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-right: 23px;
+}
+
+.header-cartdata {
+    color: #fff;
+    font-size: 23px;
+    position: relative;
+}
+
+span.cart-number-value {
+    position: absolute;
+    top: -11px;
+    left: 19px;
+    font-size: 15px;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 50%;
+}

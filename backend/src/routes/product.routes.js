@@ -10,5 +10,4 @@ router.post('/', upload.single('image'), ProductCollectionData);
 router.get("/getAllProducts", GetAllProduct)
 
 
-
 module.exports = router

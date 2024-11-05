@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { ROUTES_CONST } from '../constant/routeConstant';
+import { FaCartShopping } from "react-icons/fa6";
+
 
 function AppHeader() {
     const [data, setData] = useState([]);
@@ -125,7 +127,8 @@ function AppHeader() {
                         </div>
                     </div>
                     <div className="col-lg-3 px-0">
-                        {
+                       <div className="right-header-data">
+                       {
                             !token ? (
                                 <>
                                     <div className="row align-items-center justify-content-end w-100">
@@ -206,6 +209,11 @@ function AppHeader() {
                                 </div>
                             </>
                         }
+                        <div className="header-cartdata">
+                            <span className='cart-number-value'>0</span>
+                        <FaCartShopping />
+                        </div>
+                       </div>
                     </div>
                 </div>
             </header >

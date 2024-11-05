@@ -40,7 +40,7 @@ function ProductCards() {
                             return (
                                 <>
                                     <div className="col-lg-3" key={index}>
-                                        <Cards data={item} />
+                                        <Cards data={item} getallProducts={getallProducts} />
                                     </div>
                                 </>
                             )

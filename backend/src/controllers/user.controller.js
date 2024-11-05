@@ -236,21 +236,36 @@ const getUserChangePasswords = async(req , res) => {
 }
 
 const GetRatingFromUser = async(req , res) => {
-    const {rating,product} = req.body
-        console.log('req.user', req.user._id)
+try {
+        const {rating,product} = req.body
+            console.log('req.user', req.user._id)
+    
+        const ratingData =  await Rating.create({
+            user: req.user._id,
+            rating,
+            product
+        });
+        return res.status(200).json(
+            {
+                status: 200,
+                message: "User fetched successfully",
+                data: ratingData
+            }
+        )
+} catch (error) {
 
-    const ratingData =  await Rating.create({
-        user: req.user._id,
-        rating,
-        product
-    });
-    return res.status(200).json(
+    console.log("erorrre" , error);
+
+    return res.status(500).json(
         {
-            status: 200,
-            message: "User fetched successfully",
-            data: ratingData
+            status: 500,
+            message: "Something Went Wrong",
+            data: []
         }
     )
+    
+    
+}
 }
 
 
